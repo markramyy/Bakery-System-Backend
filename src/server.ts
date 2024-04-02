@@ -1,5 +1,10 @@
 import express from 'express'
-import router from './router'
+
+import usersRouter from './routes/users'
+import productsRouter from './routes/products'
+import ordersRouter from './routes/orders'
+import orderItemsRouter from './routes/orderItems'
+
 import morgan from 'morgan'
 import cors from 'cors'
 
@@ -23,6 +28,10 @@ app.get('/', (req, res) => {
 	res.json({message: 'Hello World!'})
 })
 
-app.use('/api', router)
+// Routes
+app.use('/api/users', usersRouter)
+app.use('/api/products', productsRouter)
+app.use('/api/orders', ordersRouter)
+app.use('/api/order-items', orderItemsRouter)
 
 export default app
