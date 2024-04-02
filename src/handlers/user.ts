@@ -51,30 +51,34 @@ export const signUp = async (req, res) => {
 export const signIn = async (req, res) => {
     const { username, password } = req.body
 
-    const user = await prisma.user.findUnique({
-        where: {
-            username
+    try{
+        const user = await prisma.user.findUnique({
+            where: {
+                username
+            }
+        })
+
+        if (!user) {
+            res.status(401)
+            res.json({ message: 'Invalid Credentials' })
+            return
         }
-    })
 
-    if (!user) {
-        res.status(401)
-        res.json({ message: 'Invalid Credentials' })
-        return
+        const passwordMatch = await comparePassword(password, user.password)
+
+        if (!passwordMatch) {
+            res.status(401)
+            res.json({ message: 'Invalid Credentials' })
+            return
+        }
+
+        const token = createJWT(user)
+        res.status(200)
+        res.json({
+            message: 'User has Logged in successfully',
+            token: token
+        });
+    } catch (error) {
+        res.status(400).json({ message: 'Something went wrong', error: error.message });
     }
-
-    const passwordMatch = await comparePassword(password, user.password)
-
-    if (!passwordMatch) {
-        res.status(401)
-        res.json({ message: 'Invalid Credentials' })
-        return
-    }
-
-    const token = createJWT(user)
-    res.status(200)
-    res.json({
-        message: 'User has Logged in successfully',
-        token: token
-    });
 }
