@@ -61,7 +61,7 @@ export const isCreator = async (req, res, next) => {
         }
 
         if (product.creatorId !== userId) {
-            return res.status(403).json({ message: 'You are not authorized to modify this product' });
+            return res.status(403).json({ message: 'You are not authorized to modify or delete this product' });
         }
         next();
     } catch (error) {
