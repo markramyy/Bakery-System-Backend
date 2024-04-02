@@ -1,17 +1,17 @@
 import express from 'express'
+import morgan from 'morgan'
+import cors from 'cors'
 
 import { signUp } from './handlers/user'
 import { signIn } from './handlers/user'
+
+import { protect } from './modules/auth'
 
 import usersRouter from './routes/users'
 import productsRouter from './routes/products'
 import ordersRouter from './routes/orders'
 import orderItemsRouter from './routes/orderItems'
 
-import morgan from 'morgan'
-import cors from 'cors'
-
-import { protect } from './modules/auth'
 
 const app = express()
 
