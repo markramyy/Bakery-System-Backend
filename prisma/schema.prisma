@@ -35,8 +35,8 @@ model User {
 
 model Product {
   id          String  @id @default(uuid())
-  name        String
-  description String?
+  name        String  @db.VarChar(255)
+  description String? @db.Text
   price       Float
   stock       Int
 
