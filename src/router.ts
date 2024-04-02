@@ -3,7 +3,9 @@ import { Router } from 'express';
 const router = Router();
 
 // User routes
-router.get('/users', () => {});
+router.get('/users', (req, res) => {
+    res.json({ message: 'Hello All Users' });
+});
 router.get('/users/:id', () => {});
 router.post('/users', () => {});
 router.put('/users/:id', () => {});
