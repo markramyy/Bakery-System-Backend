@@ -1,7 +1,7 @@
 import prisma from '../modules/db';
 
 import { Router } from 'express'
-import { handleInputError, isStaff, responseFormatter, errorHandler, validateProductId, isCreator } from '../modules/middleware';
+import { handleInputError, isStaff, responseFormatter, errorHandler, validateId, isCreator } from '../modules/middleware';
 import { body } from 'express-validator';
 import * as productHandlers from '../handlers/products';
 
@@ -12,7 +12,7 @@ router.use(responseFormatter);
 
 router.get('/', productHandlers.listProducts);
 
-router.get('/:id', validateProductId, productHandlers.getProductById);
+router.get('/:id', validateId, productHandlers.getProductById);
 
 router.post(
     '/',
@@ -30,7 +30,7 @@ router.post(
 router.put(
     '/:id',
     [
-        validateProductId,
+        validateId,
         isStaff,
         isCreator,
         body('name').optional().notEmpty().withMessage('Name cannot be empty'),
@@ -42,7 +42,7 @@ router.put(
     productHandlers.updateProduct
 );
 
-router.delete('/:id', validateProductId, isStaff, isCreator, productHandlers.deleteProduct);
+router.delete('/:id', validateId, isStaff, isCreator, productHandlers.deleteProduct);
 
 router.use(errorHandler);
 
