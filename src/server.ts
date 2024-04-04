@@ -10,7 +10,6 @@ import { protect } from './modules/auth'
 import usersRouter from './routes/users'
 import productsRouter from './routes/products'
 import ordersRouter from './routes/orders'
-import orderItemsRouter from './routes/orderItems'
 
 
 const app = express()
@@ -40,7 +39,6 @@ app.post('/signin', signIn)
 app.use('/api/users', protect, usersRouter)
 app.use('/api/products', protect, productsRouter)
 app.use('/api/orders', protect, ordersRouter)
-app.use('/api/order-items', protect, orderItemsRouter)
 
 
 export default app
