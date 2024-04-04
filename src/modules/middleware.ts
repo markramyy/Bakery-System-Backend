@@ -22,6 +22,14 @@ export const isStaff = (req, res, next) => {
 };
 
 
+export const isCustomer = (req, res, next) => {
+    if (req.user && req.user.role === 'CUSTOMER') {
+        return next();
+    }
+    return res.status(403).json({ message: 'Access denied: Customers only' });
+}
+
+
 export const errorHandler = (error, req, res, next) => {
     console.error(error);
     const statusCode = error.statusCode || 500;
@@ -41,8 +49,8 @@ export const responseFormatter = (req, res, next) => {
 };
 
 
-export const validateProductId = [
-    param('id').isUUID().withMessage('Product ID must be a valid UUID'),
+export const validateId = [
+    param('id').isUUID().withMessage('ID must be a valid UUID'),
     handleInputError,
 ];
 
