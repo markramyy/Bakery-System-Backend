@@ -1,6 +1,20 @@
 import prisma from '../modules/db';
 
 
+// const alertProductOwner = async (productId, remainingStock) => {
+//     const product = await prisma.product.findUnique({
+//         where: { id: productId },
+//         include: { creator: true }
+//     });
+
+//     if (product && product.stock <= 5) {
+//         console.log(`Alert: Stock for product ${product.name} is low. Remaining stock: ${remainingStock}.`);
+//         // Here you would put your actual alert logic, such as sending an email notification.
+//         // e.g., sendEmail(product.creator.email, `Stock for ${product.name} is low`, `Remaining stock: ${remainingStock}`);
+//     }
+// };
+
+
 export const listOrders = async (req, res) => {
     const userId = req.user.id;
     const orders = await prisma.order.findMany({
