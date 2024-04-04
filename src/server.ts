@@ -20,11 +20,6 @@ app.use(morgan('dev')) // logs requests to the console
 app.use(express.json()) // allows for JSON payloads
 app.use(express.urlencoded({ extended: true })) // allows for nested objects in query strings
 
-// Custom middleware
-// app.use((req, res, next) => {
-// 	console.log('Hello from middleware')
-// 	next()
-// })
 
 app.get('/', (req, res) => {
 	console.log('Hello from Express')
