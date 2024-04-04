@@ -18,6 +18,13 @@ enum Role {
   STAFF
 }
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  DELIVERED
+  CANCELLED
+}
+
 model User {
   id       String @id @default(uuid())
   email    String @unique
@@ -55,7 +62,7 @@ model Product {
 model Order {
   id         String @id @default(uuid())
   userId     String
-  status     String
+  status     OrderStatus @default(PENDING)
   totalPrice Float  @map("total_price")
 
   createdAt DateTime @default(now())
