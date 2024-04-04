@@ -4,6 +4,7 @@ import { Router } from 'express'
 import { handleInputError, isStaff, responseFormatter, errorHandler, validateId, isCreator } from '../modules/middleware';
 import { body } from 'express-validator';
 import * as productHandlers from '../handlers/products';
+import { RequestHandler } from 'express';
 
 
 const router = Router()
@@ -30,7 +31,6 @@ router.post(
 router.put(
     '/:id',
     [
-        validateId,
         isStaff,
         isCreator,
         body('name').optional().notEmpty().withMessage('Name cannot be empty'),
@@ -39,6 +39,7 @@ router.put(
         body('stock').optional().isInt({ min: 0 }).withMessage('Stock must be a non-negative integer'),
         handleInputError,
     ],
+    validateId,
     productHandlers.updateProduct
 );
 
