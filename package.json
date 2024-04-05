@@ -34,6 +34,8 @@
     "lodash.merge": "^4.6.2",
     "morgan": "^1.10.0",
     "supertest": "^6.3.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "ts-jest": "^29.1.2"
   },
   "devDependencies": {
