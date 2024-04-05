@@ -204,25 +204,36 @@ export const deleteUser = async (req, res) => {
             where: {
                 id: user.id
             }
-        })
+        });
 
-        const passwordMatch = await comparePassword(password, currentUser.password)
-
+        const passwordMatch = await comparePassword(password, currentUser.password);
         if (!passwordMatch) {
-            res.status(401)
-            res.json({ message: 'Invalid Credentials' })
-            return
+            res.status(401).json({ message: 'Invalid Credentials' });
+            return;
+        }
+
+        const pendingOrders = await prisma.order.findMany({
+            where: {
+                userId: user.id,
+                status: {
+                    not: 'CONFIRMED'
+                }
+            }
+        });
+
+        if (pendingOrders.length > 0) {
+            res.status(400).json({ message: 'Please complete or delete your pending orders before deleting your account.' });
+            return;
         }
 
         await prisma.user.delete({
             where: {
                 id: user.id
             }
-        })
+        });
 
-        res.status(200)
-        res.json({ message: 'User has been deleted successfully, Loging Out...' })
+        res.status(200).json({ message: 'Account has been deleted successfully, Logging Out...' });
     } catch (error) {
         res.status(400).json({ message: 'Something went wrong', error: error.message });
     }
-}
+};
