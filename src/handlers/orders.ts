@@ -100,79 +100,74 @@ export const updateOrder = async (req, res) => {
     const userId = req.user.id;
     const { orderItems: updatedOrderItems } = req.body;
 
-    try {
-        const existingOrder = await prisma.order.findUnique({
-            where: { id: req.params.id, userId: userId },
-            include: { orderItems: true }
-        });
+    const existingOrder = await prisma.order.findUnique({
+        where: { id: req.params.id, userId: userId },
+        include: { orderItems: true }
+    });
 
-        if (!existingOrder) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-
-        const originalOrderItems = new Map(existingOrder.orderItems.map(item => [item.productId, item]));
-        const updatedProductIds = updatedOrderItems.map(item => item.productId);
-
-        const allProductIds = [...Array.from(originalOrderItems.keys()), ...updatedProductIds];
-        const products = await prisma.product.findMany({
-            where: { id: { in: allProductIds } }
-        });
-
-        // Stock adjustments initialization with original quantities (add back first)
-        let stockAdjustments = new Map();
-        originalOrderItems.forEach((item, productId) => {
-            stockAdjustments.set(productId, item.quantity);
-        });
-
-        // Calculate new total price and update stock adjustments based on the updated order
-        let totalPrice = 0;
-        for (const item of updatedOrderItems) {
-            const product = products.find(p => p.id === item.productId);
-            if (!product) {
-                return res.status(404).json({ message: `Product with ID ${item.productId} not found` });
-            }
-
-            if (product.stock + (stockAdjustments.get(item.productId) || 0) < item.quantity) {
-                return res.status(400).json({ message: `Not enough stock for product with ID ${item.productId}` });
-            }
-
-            // Update stock adjustment: subtract new item quantity
-            stockAdjustments.set(item.productId, (stockAdjustments.get(item.productId) || 0) - item.quantity);
-
-            totalPrice += product.price * item.quantity;
-        }
-
-        // Update the order with new total price
-        const updateData = {
-            totalPrice,
-            orderItems: {
-                deleteMany: {},
-                create: updatedOrderItems.map(item => ({
-                    productId: item.productId,
-                    quantity: item.quantity,
-                    price: products.find(p => p.id === item.productId).price,
-                })),
-            },
-        };
-
-        const updatedOrder = await prisma.order.update({
-            where: { id: existingOrder.id },
-            data: updateData,
-        });
-
-        // Adjust stock for all affected products
-        await Promise.all(Array.from(stockAdjustments.entries()).map(([productId, adjustment]) => {
-            return prisma.product.update({
-                where: { id: productId },
-                data: { stock: { increment: adjustment } },
-            });
-        }));
-
-        res.formattedJson(200, updatedOrder, 'Order successfully updated');
-    } catch (error) {
-        console.error("Error updating order:", error);
-        res.status(400).json({ message: 'Error updating order', error: error.message });
+    if (!existingOrder) {
+        return res.status(404).json({ message: 'Order not found' });
     }
+
+    const originalOrderItems = new Map(existingOrder.orderItems.map(item => [item.productId, item]));
+    const updatedProductIds = updatedOrderItems.map(item => item.productId);
+
+    const allProductIds = [...Array.from(originalOrderItems.keys()), ...updatedProductIds];
+    const products = await prisma.product.findMany({
+        where: { id: { in: allProductIds } }
+    });
+
+    // Stock adjustments initialization with original quantities (add back first)
+    let stockAdjustments = new Map();
+    originalOrderItems.forEach((item, productId) => {
+        stockAdjustments.set(productId, item.quantity);
+    });
+
+    // Calculate new total price and update stock adjustments based on the updated order
+    let totalPrice = 0;
+    for (const item of updatedOrderItems) {
+        const product = products.find(p => p.id === item.productId);
+        if (!product) {
+            return res.status(404).json({ message: `Product with ID ${item.productId} not found` });
+        }
+
+        if (product.stock + (stockAdjustments.get(item.productId) || 0) < item.quantity) {
+            return res.status(400).json({ message: `Not enough stock for product with ID ${item.productId}` });
+        }
+
+        // Update stock adjustment: subtract new item quantity
+        stockAdjustments.set(item.productId, (stockAdjustments.get(item.productId) || 0) - item.quantity);
+
+        totalPrice += product.price * item.quantity;
+    }
+
+    // Update the order with new total price
+    const updateData = {
+        totalPrice,
+        orderItems: {
+            deleteMany: {},
+            create: updatedOrderItems.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                price: products.find(p => p.id === item.productId).price,
+            })),
+        },
+    };
+
+    const updatedOrder = await prisma.order.update({
+        where: { id: existingOrder.id },
+        data: updateData,
+    });
+
+    // Adjust stock for all affected products
+    await Promise.all(Array.from(stockAdjustments.entries()).map(([productId, adjustment]) => {
+        return prisma.product.update({
+            where: { id: productId },
+            data: { stock: { increment: adjustment } },
+        });
+    }));
+
+    res.formattedJson(200, updatedOrder, 'Order successfully updated');
 };
 
 
