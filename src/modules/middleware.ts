@@ -2,6 +2,7 @@ import { param, validationResult } from "express-validator"
 import { resolve } from "path"
 import { Router } from 'express'
 import prisma from "./db"
+import jwt from 'jsonwebtoken';
 
 
 export const handleInputError = (req, res, next) => {
@@ -76,3 +77,33 @@ export const isCreator = async (req, res, next) => {
         next(error);
     }
 };
+
+
+export const isAuth = (req, res, next) => {
+    const token = req.header('Bearer');
+
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const tokenParts = token.split(' ');
+
+    if (tokenParts.length !== 2) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const [bearer, tokenValue] = tokenParts;
+
+    if (bearer !== 'Bearer' || !tokenValue) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const user = jwt.verify(tokenValue, process.env.JWT_SECRET);
+
+    if (!user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    req.user = user;
+    next();
+}
