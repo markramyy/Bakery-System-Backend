@@ -88,7 +88,7 @@ vi.mock('../modules/middleware', () => ({
     isCreator: (req, res, next) => next(),
     validateId: (req, res, next) => next(),
     handleInputError: (req, res, next) => next(),
-    errorHandler: (err, req, res, next) => res.status(500).json({ message: err.message }),
+    errorHandler: (err, req, res) => res.status(500).json({ message: err.message }),
     responseFormatter: (req, res, next) => {
         res.formattedJson = (status, data, message = '') => {
           res.status(status).json({ data, message });

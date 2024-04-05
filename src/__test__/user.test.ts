@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, vi, afterAll } from 'vitest';
 import { createServer } from 'http';
 import express from 'express';
 import request from 'supertest';

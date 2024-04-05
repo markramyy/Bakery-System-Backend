@@ -1,6 +1,4 @@
 import { param, validationResult } from "express-validator"
-import { resolve } from "path"
-import { Router } from 'express'
 import prisma from "./db"
 import jwt from 'jsonwebtoken';
 
@@ -31,7 +29,7 @@ export const isCustomer = (req, res, next) => {
 }
 
 
-export const errorHandler = (error, req, res, next) => {
+export const errorHandler = (error, req, res) => {
     console.error(error);
     const statusCode = error.statusCode || 500;
     const message = error.message || 'An error occurred on the server.';

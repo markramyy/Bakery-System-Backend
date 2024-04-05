@@ -4,8 +4,7 @@ import express from 'express';
 import request from 'supertest';
 import * as ordersHandlers from '../handlers/orders';
 import { responseFormatter, isAuth } from '../modules/middleware';
-import prisma from '../modules/db';
-import { OrderItem } from '@prisma/client';
+
 
 vi.mock('../modules/db', async () => {
     const originalModule = await vi.importActual('../modules/db');

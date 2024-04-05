@@ -1,10 +1,7 @@
-import prisma from '../modules/db';
-
 import { Router } from 'express'
 import { handleInputError, isStaff, responseFormatter, errorHandler, validateId, isCreator } from '../modules/middleware';
 import { body } from 'express-validator';
 import * as productHandlers from '../handlers/products';
-import { RequestHandler } from 'express';
 
 
 const router = Router()

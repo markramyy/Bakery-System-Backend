@@ -118,7 +118,7 @@ export const updateOrder = async (req, res) => {
     });
 
     // Stock adjustments initialization with original quantities (add back first)
-    let stockAdjustments = new Map();
+    const stockAdjustments = new Map();
     originalOrderItems.forEach((item, productId) => {
         stockAdjustments.set(productId, item.quantity);
     });
@@ -175,7 +175,7 @@ export const deleteOrder = async (req, res) => {
     const orderId = req.params.id;
     const userId = req.user.id;
 
-    const result = await prisma.$transaction(async (prisma) => {
+    await prisma.$transaction(async (prisma) => {
         // Find the order including order items
         const order = await prisma.order.findUnique({
             where: { id: orderId, userId: userId },
