@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 RUN npm install @prisma/client --save-dev
 
-COPY package*.json tsconfig.json ./
+COPY package*.json tsconfig.json swagger.js ./
 
 RUN npm install
 
