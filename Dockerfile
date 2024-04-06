@@ -18,4 +18,4 @@ RUN npm run build
 
 EXPOSE 3001
 
-CMD npm run lint && npm run format && npm run dev
+CMD npm run lint && npm run format && npm run start
