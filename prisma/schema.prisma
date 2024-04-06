@@ -10,7 +10,11 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // Neon online database
+  // url      = env("DATABASE_URL")
+
+  // Local Docker database
+  url = env("LOCAL_DATABASE_URL")
 }
 
 enum Role {
@@ -60,10 +64,10 @@ model Product {
 }
 
 model Order {
-  id         String @id @default(uuid())
+  id         String      @id @default(uuid())
   userId     String
   status     OrderStatus @default(PENDING)
-  totalPrice Float  @map("total_price")
+  totalPrice Float       @map("total_price")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
