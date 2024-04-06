@@ -22,8 +22,6 @@ services:
     image: postgres:latest
     ports:
       - "5432:5432"
-    # volumes:
-    #   - backery_system_postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
 
@@ -40,3 +38,16 @@ services:
       - postgres
     env_file:
       - .env
+
+  prisma-studio:
+    container_name: backery_system_prisma_studio
+    build: .
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    command: sh -c "npx prisma studio"
