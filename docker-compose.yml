@@ -15,21 +15,7 @@ services:
       - .env
     depends_on:
       - postgres
-    command: sh -c "npm run lint && npm run format && npm run dev"
-
-  prisma_migrate:
-    container_name: backery_system_prisma_migrate
-    build: .
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-    command: sh -c "npx prisma migrate dev --name init"
+    command: sh -c "npx prisma migrate dev --name init && npm run lint && npm run format && npm run dev"
 
   postgres:
     container_name: backery_system_postgres
