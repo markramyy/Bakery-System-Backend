@@ -3,7 +3,9 @@ version: '3.8'
 services:
   backend:
     container_name: backery_system
-    build: .
+    build:
+      context: .
+      dockerfile: ./compose/deploy/Dockerfile
     ports:
       - "3001:3001"
     environment:
