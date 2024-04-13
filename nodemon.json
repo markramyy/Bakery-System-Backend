@@ -1,0 +1,11 @@
+{
+    "watch": ["src"],
+    "ext": "ts,js,json",
+    "ignore": ["src/__test__/*", "node_modules"],
+    "execMap": {
+      "ts": "ts-node"
+    },
+    "events": {
+      "restart": "npm run lint && npm run format"
+    }
+}

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon --config nodemon.json src/index.ts",
     "test": "vitest --coverage",
     "lint": "eslint .",
     "format": "eslint . --fix",
