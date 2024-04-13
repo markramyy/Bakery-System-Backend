@@ -62,14 +62,14 @@ To run the project using Docker, follow these steps:
 1. **Build the Docker image:**
 
 ```bash
-docker-compose build
+docker compose -f local.yml build
 ```
 
 
 2. **Run the Docker container:**
 
 ```bash
-docker-compose up
+docker compose -f local.yml up
 ```
 
 The service will be available on `http://localhost:3001`.
@@ -131,7 +131,7 @@ npm run test
 // CUSTOMER LOGIN
 {
   "username": "customer",
-  "password": "customer123" 
+  "password": "customer123"
 }
 ```
 
