@@ -8,7 +8,7 @@
     "dev": "nodemon --config nodemon.json src/index.ts",
     "test": "vitest --coverage",
     "lint": "eslint .",
-    "format": "eslint . --fix",
+    "fix": "eslint . --fix",
     "start": "node dist/index.js"
   },
   "husky": {

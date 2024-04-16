@@ -6,6 +6,6 @@
       "ts": "ts-node"
     },
     "events": {
-      "restart": "npm run lint && npm run format"
+      "restart": "npm run lint && npm run fix"
     }
 }

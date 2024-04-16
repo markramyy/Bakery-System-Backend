@@ -43,6 +43,7 @@ services:
       - .env
 
   prisma-studio:
+    image: prisma/studio
     container_name: backery_system_prisma_studio
     build: .
     ports:

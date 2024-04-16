@@ -177,7 +177,7 @@ npm run lint
 - To automatically fix Linting errors, run:
 
 ```bash
-npm run format
+npm run fix
 ```
 
 ---
