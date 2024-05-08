@@ -7,6 +7,12 @@ export const signUp = async (req, res) => {
     const { username, email, password, role } = req.body;
 
     try {
+
+        if (!username || !email || !password || !role) {
+            res.status(400).json({ message: 'All Fields are required' });
+            return;
+        }
+
         // Check if email or username already exists
         const existingUser = await prisma.user.findFirst({
             where: {
