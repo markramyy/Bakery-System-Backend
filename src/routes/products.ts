@@ -2,6 +2,9 @@ import { Router } from 'express'
 import { handleInputError, isStaff, responseFormatter, errorHandler, validateId, isCreator } from '../modules/middleware';
 import { body } from 'express-validator';
 import * as productHandlers from '../handlers/products';
+import multer from 'multer';
+
+const upload = multer({ dest: 'uploads/' });
 
 
 const router = Router()
@@ -28,7 +31,7 @@ router.use(responseFormatter);
  *       properties:
  *         id:
  *           type: string
- *           ReadOnly: true
+ *           readOnly: true
  *           description: The auto-generated id of the product
  *         name:
  *           type: string
@@ -43,13 +46,18 @@ router.use(responseFormatter);
  *         stock:
  *           type: integer
  *           description: The stock quantity of the product
+ *         images:
+ *           type: array
+ *           items:
+ *             type: string
+ *             format: uri
+ *           description: Array of image URLs associated with the product
  *       example:
- *         id: 92d471a4-4b90-43b1-8503-298927f89f6d
- *         name: French Baguette
- *         description: Freshly baked every morning.
+ *         name: "French Baguette"
+ *         description: "Freshly baked every morning."
  *         price: 2.99
  *         stock: 120
-*/
+ */
 
 /**
  * @swagger
@@ -105,9 +113,29 @@ router.get('/:id', validateId, productHandlers.getProductById);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Product'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the product
+ *               description:
+ *                 type: string
+ *                 description: Optional description of the product
+ *               price:
+ *                 type: number
+ *                 format: float
+ *                 description: The price of the product
+ *               stock:
+ *                 type: integer
+ *                 description: The stock quantity of the product
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: Image files to upload
  *     responses:
  *       201:
  *         description: The product was successfully created.
@@ -116,10 +144,11 @@ router.get('/:id', validateId, productHandlers.getProductById);
  */
 router.post(
     '/',
+    upload.array('images', 5),
+    isStaff,
     [
-        isStaff,
         body('name').notEmpty().isString().withMessage('Name is required'),
-        body('description').optional().isString().isLength({ min:0 }),
+        body('description').optional().isString(),
         body('price').notEmpty().isFloat({ min: 0 }).withMessage('Price must be a positive number'),
         body('stock').notEmpty().isInt({ min: 0 }),
         handleInputError,
