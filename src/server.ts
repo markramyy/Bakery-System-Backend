@@ -2,14 +2,12 @@ import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 
-import { signUp } from './handlers/user'
-import { signIn } from './handlers/user'
-
 import { protect } from './modules/auth'
 
 import usersRouter from './routes/users'
 import productsRouter from './routes/products'
 import ordersRouter from './routes/orders'
+import authRouter from './routes/auth'
 
 
 const app = express()
@@ -28,9 +26,7 @@ app.get('/', (req, res) => {
 })
 
 // Routes
-app.post('/signup', signUp)
-app.post('/signin', signIn)
-
+app.use('/api/auth', authRouter)
 app.use('/api/users', protect, usersRouter)
 app.use('/api/products', protect, productsRouter)
 app.use('/api/orders', protect, ordersRouter)

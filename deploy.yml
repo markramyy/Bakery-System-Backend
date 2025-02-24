@@ -3,7 +3,9 @@ version: '3.8'
 services:
   backend:
     container_name: backery_system
-    build: .
+    build:
+      context: .
+      dockerfile: ./compose/deploy/Dockerfile
     ports:
       - "3001:3001"
     environment:
@@ -15,29 +17,13 @@ services:
       - .env
     depends_on:
       - postgres
-    command: sh -c "npm run lint && npm run format && npm run dev"
-
-  prisma_migrate:
-    container_name: backery_system_prisma_migrate
-    build: .
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-    command: sh -c "npx prisma migrate dev --name init"
+    command: sh -c "npx prisma migrate dev --name init && npm run start"
 
   postgres:
     container_name: backery_system_postgres
     image: postgres:latest
     ports:
       - "5432:5432"
-    # volumes:
-    #   - backery_system_postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
 
@@ -54,3 +40,16 @@ services:
       - postgres
     env_file:
       - .env
+
+  prisma-studio:
+    container_name: backery_system_prisma_studio
+    build: .
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    command: sh -c "npx prisma studio"

@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  backend:
+    container_name: backery_system
+    build:
+      context: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - ./nodemon.json:/usr/src/app/nodemon.json
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    command: sh -c "npx prisma migrate dev --name init && npm run dev"
+
+  postgres:
+    container_name: backery_system_postgres
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: backery_system_pgadmin
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.com
+      PGADMIN_DEFAULT_PASSWORD: test
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
+  prisma-studio:
+    image: prisma/studio
+    container_name: backery_system_prisma_studio
+    build: .
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    command: sh -c "npx prisma studio"
