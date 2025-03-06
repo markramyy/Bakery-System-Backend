@@ -5,7 +5,7 @@ import express from 'express';
 import config from './config';
 import app from './server';
 import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from '../swagger';
+import swaggerSpec from './swagger';
 import path from 'path';
 
 // Serve Swagger UI static files

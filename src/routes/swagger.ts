@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import swaggerSpec from '../../swagger';
+import swaggerSpec from '../swagger';
 
 const router = Router();
 
