@@ -1,56 +1,57 @@
 {
-  "name": "bakery-system-backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "nodemon --config nodemon.json src/index.ts",
-    "test": "vitest --coverage",
-    "lint": "eslint .",
-    "fix": "eslint . --fix",
-    "start": "node dist/index.js"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
+    "name": "bakery-system-backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "clean": "rm -rf dist",
+        "build": "npm run clean && npx prisma generate && tsc -p tsconfig.json",
+        "dev": "nodemon --config nodemon.json src/index.ts",
+        "test": "vitest --coverage",
+        "lint": "eslint .",
+        "fix": "eslint . --fix",
+        "start": "node dist/index.js"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run lint"
+        }
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@prisma/client": "^5.11.0",
+        "@types/jest": "^29.5.12",
+        "@types/supertest": "^6.0.2",
+        "@typescript-eslint/eslint-plugin": "^7.5.0",
+        "@typescript-eslint/parser": "^7.5.0",
+        "bcrypt": "^5.1.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "eslint": "^8.57.0",
+        "express": "^4.19.2",
+        "express-validator": "^7.0.1",
+        "imagekit": "^5.0.1",
+        "jsonwebtoken": "^9.0.2",
+        "lodash.merge": "^4.6.2",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.5-lts.1",
+        "supertest": "^6.3.4",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.0",
+        "ts-jest": "^29.1.2"
+    },
+    "devDependencies": {
+        "@types/node": "^20.12.2",
+        "@vitest/coverage-v8": "^1.4.0",
+        "c8": "^9.1.0",
+        "husky": "^9.0.11",
+        "nodemon": "^3.1.0",
+        "prettier": "^3.2.5",
+        "prisma": "^5.11.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.3",
+        "vitest": "^1.4.0"
     }
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@prisma/client": "^5.11.0",
-    "@types/jest": "^29.5.12",
-    "@types/supertest": "^6.0.2",
-    "@typescript-eslint/eslint-plugin": "^7.5.0",
-    "@typescript-eslint/parser": "^7.5.0",
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "eslint": "^8.57.0",
-    "express": "^4.19.2",
-    "express-validator": "^7.0.1",
-    "imagekit": "^5.0.1",
-    "jsonwebtoken": "^9.0.2",
-    "lodash.merge": "^4.6.2",
-    "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
-    "supertest": "^6.3.4",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0",
-    "ts-jest": "^29.1.2"
-  },
-  "devDependencies": {
-    "@types/node": "^20.12.2",
-    "@vitest/coverage-v8": "^1.4.0",
-    "c8": "^9.1.0",
-    "husky": "^9.0.11",
-    "nodemon": "^3.1.0",
-    "prettier": "^3.2.5",
-    "prisma": "^5.11.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.3",
-    "vitest": "^1.4.0"
-  }
 }
