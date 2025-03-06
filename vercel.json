@@ -28,7 +28,7 @@
             "dest": "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui-standalone-preset.js"
         },
         {
-            "src": "/api-docs(/?.*)",
+            "src": "/api-docs",
             "dest": "src/index.ts"
         },
         {
