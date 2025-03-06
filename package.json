@@ -4,13 +4,14 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "vercel-build": "prisma generate && tsc -p tsconfig.json",
+        "start": "node dist/index.js",
         "clean": "rm -rf dist",
-        "build": "npm run clean && npx prisma generate && tsc -p tsconfig.json",
+        "build": "tsc -p tsconfig.json",
         "dev": "nodemon --config nodemon.json src/index.ts",
         "test": "vitest --coverage",
         "lint": "eslint .",
-        "fix": "eslint . --fix",
-        "start": "node dist/index.js"
+        "fix": "eslint . --fix"
     },
     "husky": {
         "hooks": {
