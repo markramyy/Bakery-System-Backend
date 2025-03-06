@@ -1,14 +1,5 @@
 import prisma from '../modules/db';
 import ImageKit from 'imagekit';
-import multer from 'multer';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB limit
-    },
-});
 
 const imageKit = new ImageKit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,

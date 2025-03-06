@@ -1,13 +1,24 @@
-import { Router } from 'express'
-import { handleInputError, isStaff, responseFormatter, errorHandler, validateId, isCreator } from '../modules/middleware';
+import { Router } from 'express';
+import {
+    handleInputError,
+    isStaff,
+    responseFormatter,
+    errorHandler,
+    validateId,
+    isCreator,
+} from '../modules/middleware';
 import { body } from 'express-validator';
 import * as productHandlers from '../handlers/products';
 import multer from 'multer';
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+    },
+});
 
-
-const router = Router()
+const router = Router();
 
 router.use(responseFormatter);
 
@@ -77,7 +88,6 @@ router.use(responseFormatter);
  */
 router.get('/', productHandlers.listProducts);
 
-
 /**
  * @swagger
  * /api/products/{id}:
@@ -102,7 +112,6 @@ router.get('/', productHandlers.listProducts);
  *         description: Product not found.
  */
 router.get('/:id', validateId, productHandlers.getProductById);
-
 
 /**
  * @swagger
@@ -153,9 +162,8 @@ router.post(
         body('stock').notEmpty().isInt({ min: 0 }),
         handleInputError,
     ],
-    productHandlers.createProduct
+    productHandlers.createProduct,
 );
-
 
 /**
  * @swagger
@@ -196,9 +204,8 @@ router.put(
         handleInputError,
     ],
     validateId,
-    productHandlers.updateProduct
+    productHandlers.updateProduct,
 );
-
 
 /**
  * @swagger
