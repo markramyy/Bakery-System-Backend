@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "vercel-build": "prisma generate && tsc -p tsconfig.json && cp -r src/routes/*.ts dist/routes/",
+        "vercel-build": "prisma generate && tsc -p tsconfig.json && cp -r src/swagger-template.html dist/ && cp -r src/routes/*.ts dist/routes/",
         "start": "node dist/index.js",
         "clean": "rm -rf dist",
         "build": "tsc -p tsconfig.json",
