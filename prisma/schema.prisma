@@ -11,9 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   // Neon online database
-  // url      = env("DATABASE_URL")
-  // Local Docker database
-  url      = env("LOCAL_DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
