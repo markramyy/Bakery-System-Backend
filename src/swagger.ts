@@ -1,5 +1,4 @@
 import swaggerJSDoc from 'swagger-jsdoc';
-import { join } from 'path';
 
 const options = {
     definition: {
@@ -29,7 +28,7 @@ const options = {
         },
         security: [{ bearerAuth: [] }],
     },
-    apis: [join(__dirname, 'routes/*.ts')],
+    apis: ['./src/routes/*.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

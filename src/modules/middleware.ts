@@ -1,17 +1,18 @@
-import { param, validationResult } from "express-validator"
-import prisma from "./db"
+import { param, validationResult } from 'express-validator';
+import prisma from './db';
 import jwt from 'jsonwebtoken';
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from '../swagger';
+import express from 'express';
 
 export const handleInputError = (req, res, next) => {
-    const errors = validationResult(req)
+    const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        return res.status(400).json({ errors: errors.array() });
     }
     next();
-}
-
+};
 
 export const isStaff = (req, res, next) => {
     if (req.user && req.user.role === 'STAFF') {
@@ -20,14 +21,12 @@ export const isStaff = (req, res, next) => {
     return res.status(403).json({ message: 'Access denied: Staff only' });
 };
 
-
 export const isCustomer = (req, res, next) => {
     if (req.user && req.user.role === 'CUSTOMER') {
         return next();
     }
     return res.status(403).json({ message: 'Access denied: Customers only' });
-}
-
+};
 
 export const errorHandler = (error, req, res) => {
     console.error(error);
@@ -35,7 +34,6 @@ export const errorHandler = (error, req, res) => {
     const message = error.message || 'An error occurred on the server.';
     res.status(statusCode).json({ message });
 };
-
 
 export const responseFormatter = (req, res, next) => {
     res.formattedJson = (status, data, message = '') => {
@@ -47,12 +45,7 @@ export const responseFormatter = (req, res, next) => {
     next();
 };
 
-
-export const validateId = [
-    param('id').isUUID().withMessage('ID must be a valid UUID'),
-    handleInputError,
-];
-
+export const validateId = [param('id').isUUID().withMessage('ID must be a valid UUID'), handleInputError];
 
 export const isCreator = async (req, res, next) => {
     const productId = req.params.id;
@@ -75,7 +68,6 @@ export const isCreator = async (req, res, next) => {
         next(error);
     }
 };
-
 
 export const isAuth = (req, res, next) => {
     const token = req.header('Bearer');
@@ -104,4 +96,26 @@ export const isAuth = (req, res, next) => {
 
     req.user = user;
     next();
-}
+};
+
+export const setupSwagger = (app: express.Application) => {
+    // Serve swagger.json
+    app.get('/swagger.json', (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swaggerSpec);
+    });
+
+    // Setup Swagger UI
+    app.use('/api-docs', swaggerUi.serve);
+    app.get(
+        '/api-docs',
+        swaggerUi.setup(swaggerSpec, {
+            explorer: true,
+            customSiteTitle: 'Bakery API Documentation',
+            swaggerOptions: {
+                persistAuthorization: true,
+                url: '/swagger.json',
+            },
+        }),
+    );
+};
