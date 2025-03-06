@@ -12,7 +12,7 @@ const options = {
             {
                 url:
                     process.env.NODE_ENV === 'production'
-                        ? 'https://bakery-system-backend.vercel.app/api-docs'
+                        ? 'https://bakery-system-backend.vercel.app/api'
                         : 'http://localhost:3000/api',
                 description: 'API server',
             },
