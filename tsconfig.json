@@ -11,5 +11,5 @@
         "declaration": true
     },
     "exclude": ["node_modules"],
-    "include": ["src/**/*.ts"]
+    "include": ["src/**/*.ts", "swagger.ts"]
 }

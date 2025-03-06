@@ -1,15 +1,28 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as dotenv from 'dotenv';
+dotenv.config();
 
-import config from './config'
-import app from './server'
+import express from 'express';
+import config from './config';
+import app from './server';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from '../swagger';
+import path from 'path';
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('../swagger.js');
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Serve Swagger UI static files
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+        explorer: true,
+        customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css',
+        customJs: [
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui-bundle.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui-standalone-preset.js',
+        ],
+    }),
+);
 
 app.listen(config.port, () => {
-	console.log(`Server on http://localhost:${config.port}/api-docs`)
-})
+    console.log(`Server on http://localhost:${config.port}/api-docs`);
+});
