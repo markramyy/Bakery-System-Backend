@@ -8,11 +8,15 @@
     ],
     "routes": [
         {
-            "src": "/api-docs/(.*)",
+            "src": "/swagger.json",
             "dest": "src/index.ts"
         },
         {
-            "src": "/swagger.json",
+            "src": "/api-docs",
+            "dest": "src/index.ts"
+        },
+        {
+            "src": "/api-docs/(.*)",
             "dest": "src/index.ts"
         },
         {

@@ -1,4 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import { join } from 'path';
 
 const options = {
     definition: {
@@ -12,8 +13,8 @@ const options = {
             {
                 url:
                     process.env.NODE_ENV === 'production'
-                        ? 'https://bakery-system-backend.vercel.app/api'
-                        : 'http://localhost:3000/api',
+                        ? 'https://bakery-system-backend.vercel.app'
+                        : 'http://localhost:3001',
                 description: 'API server',
             },
         ],
@@ -26,13 +27,9 @@ const options = {
                 },
             },
         },
-        security: [
-            {
-                bearerAuth: [],
-            },
-        ],
+        security: [{ bearerAuth: [] }],
     },
-    apis: ['./src/routes/*.ts'],
+    apis: [join(__dirname, 'routes/*.ts')],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
